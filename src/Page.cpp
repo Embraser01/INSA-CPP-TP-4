@@ -1,6 +1,6 @@
 #include "Page.h"
 
-using namespace std::cout;
+using std::cout;
 
 //------------------------------------------- Constantes, statiques et types privés
 

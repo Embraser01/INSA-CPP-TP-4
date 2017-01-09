@@ -37,9 +37,8 @@ public:
 
 protected:
 private:
-    std::istream &readFile(std::string fileName);
+    void readFile(std::string fileName, std::istream &input);
     // TODO Documentation
-
 
     void writeFile(std::string fileName, std::ostream &output);
     // TODO Documentation
@@ -47,7 +46,7 @@ private:
     void parse(std::istream &input);
     // TODO Documentation
 
-    std::ostream &generateGraph();
+    void &generateGraph(std::ostream &output);
     // TODO Documentation
 
     void displayTop();
@@ -57,7 +56,15 @@ private:
 
 protected:
 private:
-    std::map <std::string, Page> catalog;
+    std::map<std::string, Page> catalog;
+
+    std::pair<bool, std::string> graph;
+
+    bool exclude;
+
+    std::pair<bool, uint> time;
+
+    std::string fileName;
 
 };
 
