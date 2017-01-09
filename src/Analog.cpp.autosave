@@ -6,6 +6,7 @@
 *************************************************************************/
 
 #include <limits>
+#include <ctime>
 
 #include "Analog.h"
 
@@ -16,9 +17,10 @@ void Analog::parse(std::istream &input)
     std::string referrer;
 
     std::string hour;
-    std::string minute;
-    std::string second;
-    struct tm time;
+    uint uihour;
+
+    time.isdst = false;
+    
 
     while (true) {
         input.ignore(std::numeric_limits<std::streamsize>::max(), ':');
@@ -26,13 +28,7 @@ void Analog::parse(std::istream &input)
         if (input.eof()) break;
 
         getline(input, hour, ':');
-        time.tm_hour = std::stoi(hour);
-
-        getline(input, minute, ':');
-        time.tm_min = std::stoi(minute);
-
-        getline(input, second, ' ');
-        time.tm_sec = std::stoi(second);
+        uihour = std::stoi(hour);
 
         input.ignore(std::numeric_limits<std::streamsize>::max(), '"');
         input.ignore(std::numeric_limits<std::streamsize>::max(), ' ');
@@ -45,5 +41,15 @@ void Analog::parse(std::istream &input)
         getline(input, referrer, '"');
 
         input.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        
+        if (time.first) {
+            if (!(time.second <= uihour && uihour < (time.second + 1))) {
+                continue;
+            }
+        }
+        
+        if (exclude) {
+            
+        }
     }
 }

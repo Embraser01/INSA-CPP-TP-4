@@ -1,0 +1,2 @@
+obj/Analog.o: src/Analog.cpp src/Analog.h src/Page.h
+obj/Page.o: src/Page.cpp src/Page.h
