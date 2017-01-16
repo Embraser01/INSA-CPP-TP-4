@@ -16,20 +16,20 @@ LogReader::LogReader(std::istream &inputStream) : m_inputStream(inputStream)
 int LogReader::GetMonthIndex(const std::string &monthName)
 {
     static const std::map<std::string, int> months
-    {
-        {"Jan", 0},
-        {"Feb", 1},
-        {"Mar", 2},
-        {"Apr", 3},
-        {"May", 4},
-        {"Jun", 5},
-        {"Jul", 6},
-        {"Aug", 7},
-        {"Sep", 8},
-        {"Oct", 9},
-        {"Nov", 10},
-        {"Dec", 11}
-    };
+            {
+                    {"Jan", 0},
+                    {"Feb", 1},
+                    {"Mar", 2},
+                    {"Apr", 3},
+                    {"May", 4},
+                    {"Jun", 5},
+                    {"Jul", 6},
+                    {"Aug", 7},
+                    {"Sep", 8},
+                    {"Oct", 9},
+                    {"Nov", 10},
+                    {"Dec", 11}
+            };
 
     const auto iter(months.find(monthName));
 
@@ -59,6 +59,7 @@ LogReader &operator>>(LogReader &lr, LogEntry &e)
     getline(lr.m_inputStream, day, '/');
     convert << day;
     convert >> e.timeDate.tm_mday;
+    convert.clear();
 
     std::string month;
     getline(lr.m_inputStream, month, '/');
@@ -68,21 +69,25 @@ LogReader &operator>>(LogReader &lr, LogEntry &e)
     getline(lr.m_inputStream, year, ':');
     convert << year;
     convert >> e.timeDate.tm_year;
+    convert.clear();
 
     std::string hour;
     getline(lr.m_inputStream, hour, ':');
     convert << hour;
     convert >> e.timeDate.tm_hour;
+    convert.clear();
 
     std::string minute;
     getline(lr.m_inputStream, minute, ':');
     convert << minute;
     convert >> e.timeDate.tm_min;
+    convert.clear();
 
     std::string second;
     getline(lr.m_inputStream, second, ' ');
     convert << second;
     convert >> e.timeDate.tm_sec;
+    convert.clear();
 
     std::string timezone;
     getline(lr.m_inputStream, timezone, ']');
@@ -101,11 +106,13 @@ LogReader &operator>>(LogReader &lr, LogEntry &e)
     getline(lr.m_inputStream, status, ' ');
     convert << status;
     convert >> e.status;
+    convert.clear();
 
     std::string size;
     getline(lr.m_inputStream, size, ' ');
     convert << size;
     convert >> e.size;
+    convert.clear();
 
     lr.m_inputStream.ignore(1, '"');
 

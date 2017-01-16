@@ -22,8 +22,9 @@ using std::cout;
 
 //------------------------------------------- Constantes, statiques et types privés
 
-const std::string NODE_PREFIX = "node";
-const unsigned int MAX_DISPLAY_LINES = 10;
+static const std::string NODE_PREFIX = "node";
+static const std::string LOCAL_PREFIX = "http://intranet-if.insa-lyon.fr";
+static const unsigned int MAX_DISPLAY_LINES = 10;
 
 //------------------------------------------- Méthodes protégées et privées
 
@@ -134,16 +135,60 @@ void Analog::readFile(std::string fileName)
                 continue;
             }
         }
+        size_t foundPage = e.page.find_first_of("?#;");
+        size_t foundRef = e.referrer.find_first_of("?#;");
+        size_t foundLocalPrefixPage = e.page.find(LOCAL_PREFIX);
+        size_t foundLocalPrefixRef = e.referrer.find(LOCAL_PREFIX);
 
-        pages[e.page].AddHit(&pages[e.referrer]);
+        string page = e.page;
+        string referrer = e.referrer;
+
+        if (foundPage != string::npos)
+        {
+            page = page.substr(0, foundPage);
+        }
+        if (foundRef  != string::npos)
+        {
+            referrer = referrer.substr(0, foundRef);
+        }
+        if (foundLocalPrefixPage == 0)
+        {
+            page = page.erase(foundLocalPrefixPage, LOCAL_PREFIX.size());
+        }
+        if (foundLocalPrefixRef == 0)
+        {
+            referrer = referrer.erase(foundLocalPrefixRef, LOCAL_PREFIX.size());
+        }
+
+
+        pages[page].AddHit(&pages[referrer]);
     }
 }
 
 
 void Analog::writeGraph(std::string fileName)
 {
+    if (std::ifstream(fileName))
+    {
+        cout << "File already exists, do you want to continue ? (y/N): ";
+        string entry;
+        getline(std::cin, entry);
+
+        if (tolower(entry[0]) != 'y')
+        {
+            return;
+        }
+    }
+
     std::ofstream ofs(fileName);
 
+    // On vérifie que le fichier existe et est lisible & inscriptible
+
+    if (!ofs.is_open())
+    {
+        cout << "Erreur, impossible d'obtenir un flux d'écriture" << endl;
+        return;
+    }
     // TODO Check if exists/etc…
 
     generateGraph(ofs);
