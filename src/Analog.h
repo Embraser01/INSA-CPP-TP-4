@@ -19,7 +19,7 @@ class Analog
 
 public:
 
-    int Run(std::pair<bool, std::string> graph, bool exclude, std::pair<bool, struct tm> time, std::string fileName);
+    int Run(std::pair<bool, std::string> graph, bool exclude, std::pair<bool, uint> time, std::string fileName);
     // TODO Documentation
 
     //--------------------------------------- Redéfinition d'opérateurs
@@ -56,7 +56,7 @@ private:
 
 protected:
 private:
-    std::map<std::string, Page> catalog;
+    std::map <std::string, Page> pages;
 
     std::pair<bool, std::string> graph;
 

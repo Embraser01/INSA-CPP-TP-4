@@ -1,0 +1,55 @@
+/*************************************************************************
+                           Analog  -  Description
+                             -------------------
+    début                : 09/01/2017
+    e-mail               : $EMAIL
+*************************************************************************/
+
+#include <limits>
+#include <ctime>
+
+#include "Analog.h"
+
+
+void Analog::parse(std::istream &input)
+{
+    std::string pageName;
+    std::string referrer;
+
+    std::string hour;
+    uint uihour;
+
+    time.isdst = false;
+    
+
+    while (true) {
+        input.ignore(std::numeric_limits<std::streamsize>::max(), ':');
+
+        if (input.eof()) break;
+
+        getline(input, hour, ':');
+        uihour = std::stoi(hour);
+
+        input.ignore(std::numeric_limits<std::streamsize>::max(), '"');
+        input.ignore(std::numeric_limits<std::streamsize>::max(), ' ');
+
+        getline(input, pageName, ' ');
+
+        input.ignore(std::numeric_limits<std::streamsize>::max(), '"');
+        input.ignore(std::numeric_limits<std::streamsize>::max(), '"');
+
+        getline(input, referrer, '"');
+
+        input.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        
+        if (time.first) {
+            if (!(time.second <= uihour && uihour < (time.second + 1))) {
+                continue;
+            }
+        }
+        
+        if (exclude) {
+            
+        }
+    }
+}
