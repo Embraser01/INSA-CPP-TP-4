@@ -135,10 +135,6 @@ void Analog::parse(std::istream &input)
     }
 }
 
-int Analog::Run(std::pair<bool, std::string> graph, bool exclude, std::pair<bool, uint> time, std::string fileName)
-{
-    return 0;
-}
 
 Analog::Analog()
 {
