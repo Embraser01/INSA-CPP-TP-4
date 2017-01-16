@@ -85,7 +85,7 @@ LogReader &operator>>(LogReader &lr, LogEntry &e)
     convert >> e.timeDate.tm_sec;
 
     std::string timezone;
-    getline(lr.m_inputStream, timezone, '}');
+    getline(lr.m_inputStream, timezone, ']');
 
     lr.m_inputStream.ignore(2);
 

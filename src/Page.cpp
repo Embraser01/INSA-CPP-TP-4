@@ -23,6 +23,7 @@ void Page::AddHit(Page *referrer)
 {
     // Init to 0
     referrers[referrer]++;
+    hits++;
 }
 
 //------------------------------------------- Redefinition d'operateurs

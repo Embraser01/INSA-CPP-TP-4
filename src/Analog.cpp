@@ -100,7 +100,7 @@ void Analog::displayTop()
     std::vector<std::pair<string, Page>> items(pages.begin(), pages.end());
 
     auto cmp = [](std::pair<string, Page> const &a, std::pair<string, Page> const &b) {
-        return a.second.Hits() != b.second.Hits() ? a.second.Hits() < b.second.Hits() : a.first < b.first;
+        return a.second.Hits() != b.second.Hits() ? a.second.Hits() > b.second.Hits() : a.first < b.first;
     };
 
     std::sort(items.begin(), items.end(), cmp);
