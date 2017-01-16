@@ -4,46 +4,46 @@
 
 #include "LogReader.h"
 
-#include <string>
+#include <sstream>
+#include <map>
+#include <iterator>
 
-LogReader::LogReader(std::istream &inputStream) : m_inputStream(inputStream)
-{
+LogReader::LogReader(std::istream &inputStream) : m_inputStream(inputStream) {
 
 }
 
-int LogReader::GetMonthIndex(const std::string & monthName)
-{
+int LogReader::GetMonthIndex(const std::string &monthName) {
 	static const std::map<std::string, int> months
-	{
-			{ "Jan", 0 },
-			{ "Feb", 1 },
-			{ "Mar", 2 },
-			{ "Apr", 3 },
-			{ "May", 4 },
-			{ "Jun", 5 },
-			{ "Jul", 6 },
-			{ "Aug", 7 },
-			{ "Sep", 8 },
-			{ "Oct", 9 },
-			{ "Nov", 10 },
-			{ "Dec", 11 }
-	};
+			{
+					{"Jan", 0},
+					{"Feb", 1},
+					{"Mar", 2},
+					{"Apr", 3},
+					{"May", 4},
+					{"Jun", 5},
+					{"Jul", 6},
+					{"Aug", 7},
+					{"Sep", 8},
+					{"Oct", 9},
+					{"Nov", 10},
+					{"Dec", 11}
+			};
 
 	const auto iter(months.find(monthName));
 
-	return (iter != std::cend(months)) ? iter->second : -1;
+	return (iter != std::end(months)) ? iter->second : -1;
 }
 
-LogReader::operator bool() const
-{
-	return m_inputStream;
+LogReader::operator bool() const {
+	return (bool) m_inputStream;
 }
 
-LogReader& operator>>(LogReader& lr, LogEntry& e)
-{
+LogReader &operator>>(LogReader &lr, LogEntry &e) {
+	std::stringstream convert;
+
 	getline(lr.m_inputStream, e.ip, ' ');
 
-	if (input.eof())
+	if (lr.m_inputStream.eof()) return lr;
 
 	getline(lr.m_inputStream, e.userLogname, ' ');
 
@@ -53,27 +53,32 @@ LogReader& operator>>(LogReader& lr, LogEntry& e)
 
 	std::string day;
 	getline(lr.m_inputStream, day, '/');
-	e.timeDate.tm_mday = std::stoi(day);
+	convert << day;
+	convert >> e.timeDate.tm_mday;
 
 	std::string month;
 	getline(lr.m_inputStream, month, '/');
-	e.timeDate.tm_mon = GetMonthIndex(month);
+	e.timeDate.tm_mon = lr.GetMonthIndex(month);
 
 	std::string year;
 	getline(lr.m_inputStream, year, ':');
-	e.timeDate.tm_year = std::stoi(year);
+	convert << year;
+	convert >> e.timeDate.tm_year;
 
 	std::string hour;
 	getline(lr.m_inputStream, hour, ':');
-	e.timeDate.tm_hour = std::stoi(hour);
+	convert << hour;
+	convert >> e.timeDate.tm_hour;
 
 	std::string minute;
 	getline(lr.m_inputStream, minute, ':');
-	e.timeDate.tm_min = std::stoi(minute);
+	convert << minute;
+	convert >> e.timeDate.tm_min;
 
 	std::string second;
 	getline(lr.m_inputStream, second, ' ');
-	e.timeDate.tm_sec = std::stoi(second);
+	convert << second;
+	convert >> e.timeDate.tm_sec;
 
 	std::string timezone;
 	getline(lr.m_inputStream, timezone, '}');
@@ -90,11 +95,13 @@ LogReader& operator>>(LogReader& lr, LogEntry& e)
 
 	std::string status;
 	getline(lr.m_inputStream, status, ' ');
-	e.status = std::stoi(status);
+	convert << status;
+	convert >> e.status;
 
 	std::string size;
 	getline(lr.m_inputStream, size, ' ');
-	e.size = std::stoi(size);
+	convert << size;
+	convert >> e.size;
 
 	lr.m_inputStream.ignore(1, '"');
 
@@ -103,6 +110,8 @@ LogReader& operator>>(LogReader& lr, LogEntry& e)
 	lr.m_inputStream.ignore(2);
 
 	getline(lr.m_inputStream, e.userAgent, '"');
+
+	lr.m_inputStream.ignore(2, '\n');
 
 	return lr;
 }

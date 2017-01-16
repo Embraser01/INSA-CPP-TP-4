@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Page.h"
 
 using std::cout;
@@ -8,12 +9,12 @@ using std::cout;
 
 //------------------------------------------- METHODES PUBLIC
 
-uint Page::Hits()
+unsigned int Page::Hits()
 {
     return hits;
 }
 
-const std::unordered_map<Page *, uint> &Page::Referrers()
+const std::unordered_map<Page *, unsigned int> &Page::Referrers()
 {
     return referrers;
 }
@@ -37,7 +38,7 @@ Page::Page()
 #endif
 }
 
-void Page::~Page()
+Page::~Page()
 {
 
 #ifdef MAP
