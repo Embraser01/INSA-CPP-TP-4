@@ -9,12 +9,12 @@ using std::cout;
 
 //------------------------------------------- METHODES PUBLIC
 
-uint Page::Hits()
+unsigned int Page::Hits()
 {
     return hits;
 }
 
-const std::unordered_map<Page *, uint> &Page::Referrers()
+const std::unordered_map<Page *, unsigned int> &Page::Referrers()
 {
     return referrers;
 }

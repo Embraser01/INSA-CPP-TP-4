@@ -46,7 +46,7 @@ public:
 
 protected:
 private:
-    void readFile(std::string fileName, std::istream &input);
+    void readFile(std::string fileName);
     // TODO Documentation
 
     void writeFile(std::string fileName, std::ostream &output);

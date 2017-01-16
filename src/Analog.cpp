@@ -9,8 +9,10 @@
 #include <string>
 #include <iostream>
 #include <algorithm>
+#include <sstream>
 
 #include "Analog.h"
+#include "LogReader.h"
 
 using std::string;
 using std::endl;
@@ -28,7 +30,7 @@ const uint MAX_DISPLAY_LINES = 10;
 void Analog::generateGraph(std::ostream &output)
 {
     typedef std::map<std::string, Page>::iterator it_map_type;
-    typedef std::unordered_map<Page *, uint>::iterator it_umap_type;
+    typedef std::unordered_map<Page *, unsigned int>::iterator it_umap_type;
     std::unordered_map<Page *, string> nodes;
 
     // First line
@@ -42,7 +44,12 @@ void Analog::generateGraph(std::ostream &output)
 
     for (int i = 0; iterator != pages.end(); iterator++, i++)
     {
-        nodes[&(iterator->second)] = NODE_PREFIX + std::to_string(i);
+	    std::string num;
+	    std::stringstream convert;
+	    convert << i;
+	    convert >> num;
+
+        nodes[&(iterator->second)] = NODE_PREFIX + num;
         // Declare nodes
         output << nodes[&(iterator->second)] << " [label=\"" << iterator->first << "\"];" << endl;
     }
@@ -52,7 +59,7 @@ void Analog::generateGraph(std::ostream &output)
 
     for (iterator = pages.begin(); iterator != pages.end(); iterator++)
     {
-        std::unordered_map<Page *, uint> tmp = iterator->second.Referrers();
+        std::unordered_map<Page *, unsigned int> tmp = iterator->second.Referrers();
 
         for (it_umap_type iterator_bis = tmp.begin(); iterator_bis != tmp.end(); iterator_bis++)
         {
@@ -65,6 +72,20 @@ void Analog::generateGraph(std::ostream &output)
 
     output << "}" << endl;
 
+}
+
+void Analog::readFile(std::string fileName)
+{
+	std::ifstream ifs(fileName, std::ifstream::in);
+
+	LogReader lr(ifs);
+
+	LogEntry e;
+
+	while (lr >> e)
+	{
+		pages[e.page].AddHit(&pages[e.referrer]);
+	}
 }
 
 //------------------------------------------- METHODES PUBLIC
@@ -86,8 +107,7 @@ void Analog::parse(std::istream &input)
     std::string second;
     struct tm time;
 
-    while (true)
-    {
+    while (true) {
         input.ignore(std::numeric_limits<std::streamsize>::max(), ':');
 
         if (input.eof()) break;
@@ -115,6 +135,10 @@ void Analog::parse(std::istream &input)
     }
 }
 
+int Analog::Run(std::pair<bool, std::string> graph, bool exclude, std::pair<bool, uint> time, std::string fileName)
+{
+    return 0;
+}
 
 Analog::Analog()
 {
@@ -122,11 +146,6 @@ Analog::Analog()
 }
 
 Analog::~Analog()
-{
-
-}
-
-void Analog::readFile(std::string fileName, std::istream &input)
 {
 
 }

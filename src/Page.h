@@ -16,11 +16,11 @@ class Page
 
 public:
 
-    uint Hits();
+    unsigned int Hits();
     // TODO Documentation
 
 
-    const std::unordered_map<Page *, uint> &Referrers();
+    const std::unordered_map<Page *, unsigned int> &Referrers();
     // TODO Documentation
 
 
@@ -47,8 +47,8 @@ private:
 
 protected:
 private:
-    std::unordered_map<Page *, uint> referrers;
-    uint hits;
+    std::unordered_map<Page *, unsigned int> referrers;
+    unsigned int hits;
 
 };
 
