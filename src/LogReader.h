@@ -8,17 +8,19 @@
 #include <iostream>
 #include "LogEntry.h"
 
-class LogReader {
+class LogReader
+{
 public:
-	explicit LogReader(std::istream &inputStream);
+    explicit LogReader(std::istream &inputStream);
 
-	int GetMonthIndex(const std::string & monthName);
-	operator bool() const;
+    int GetMonthIndex(const std::string &monthName);
 
-	friend LogReader& operator>>(LogReader& lr, LogEntry& e);
+    operator bool() const;
+
+    friend LogReader &operator>>(LogReader &lr, LogEntry &e);
 
 private:
-	std::istream &m_inputStream;
+    std::istream &m_inputStream;
 };
 
 #endif //TP4_LOGREADER_H

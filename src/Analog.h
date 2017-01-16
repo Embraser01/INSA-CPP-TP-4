@@ -52,9 +52,6 @@ private:
     void writeFile(std::string fileName, std::ostream &output);
     // TODO Documentation
 
-    void parse(std::istream &input);
-    // TODO Documentation
-
     void generateGraph(std::ostream &output);
     // TODO Documentation
 

@@ -8,110 +8,114 @@
 #include <map>
 #include <iterator>
 
-LogReader::LogReader(std::istream &inputStream) : m_inputStream(inputStream) {
+LogReader::LogReader(std::istream &inputStream) : m_inputStream(inputStream)
+{
 
 }
 
-int LogReader::GetMonthIndex(const std::string &monthName) {
-	static const std::map<std::string, int> months
-			{
-					{"Jan", 0},
-					{"Feb", 1},
-					{"Mar", 2},
-					{"Apr", 3},
-					{"May", 4},
-					{"Jun", 5},
-					{"Jul", 6},
-					{"Aug", 7},
-					{"Sep", 8},
-					{"Oct", 9},
-					{"Nov", 10},
-					{"Dec", 11}
-			};
+int LogReader::GetMonthIndex(const std::string &monthName)
+{
+    static const std::map<std::string, int> months
+            {
+                    {"Jan", 0},
+                    {"Feb", 1},
+                    {"Mar", 2},
+                    {"Apr", 3},
+                    {"May", 4},
+                    {"Jun", 5},
+                    {"Jul", 6},
+                    {"Aug", 7},
+                    {"Sep", 8},
+                    {"Oct", 9},
+                    {"Nov", 10},
+                    {"Dec", 11}
+            };
 
-	const auto iter(months.find(monthName));
+    const auto iter(months.find(monthName));
 
-	return (iter != std::end(months)) ? iter->second : -1;
+    return (iter != std::end(months)) ? iter->second : -1;
 }
 
-LogReader::operator bool() const {
-	return (bool) m_inputStream;
+LogReader::operator bool() const
+{
+    return (bool) m_inputStream;
 }
 
-LogReader &operator>>(LogReader &lr, LogEntry &e) {
-	std::stringstream convert;
+LogReader &operator>>(LogReader &lr, LogEntry &e)
+{
+    std::stringstream convert;
 
-	getline(lr.m_inputStream, e.ip, ' ');
+    getline(lr.m_inputStream, e.ip, ' ');
 
-	if (lr.m_inputStream.eof()) return lr;
+    if (lr.m_inputStream.eof()) return lr;
 
-	getline(lr.m_inputStream, e.userLogname, ' ');
+    getline(lr.m_inputStream, e.userLogname, ' ');
 
-	getline(lr.m_inputStream, e.authenticatedUser, ' ');
+    getline(lr.m_inputStream, e.authenticatedUser, ' ');
 
-	lr.m_inputStream.ignore(1, '[');
+    lr.m_inputStream.ignore(1, '[');
 
-	std::string day;
-	getline(lr.m_inputStream, day, '/');
-	convert << day;
-	convert >> e.timeDate.tm_mday;
+    std::string day;
+    getline(lr.m_inputStream, day, '/');
+    convert << day;
+    convert >> e.timeDate.tm_mday;
 
-	std::string month;
-	getline(lr.m_inputStream, month, '/');
-	e.timeDate.tm_mon = lr.GetMonthIndex(month);
+    std::string month;
+    getline(lr.m_inputStream, month, '/');
+    e.timeDate.tm_mon = lr.GetMonthIndex(month);
 
-	std::string year;
-	getline(lr.m_inputStream, year, ':');
-	convert << year;
-	convert >> e.timeDate.tm_year;
+    std::string year;
+    getline(lr.m_inputStream, year, ':');
+    convert << year;
+    convert >> e.timeDate.tm_year;
 
-	std::string hour;
-	getline(lr.m_inputStream, hour, ':');
-	convert << hour;
-	convert >> e.timeDate.tm_hour;
+    std::string hour;
+    getline(lr.m_inputStream, hour, ':');
+    convert << hour;
+    convert >> e.timeDate.tm_hour;
 
-	std::string minute;
-	getline(lr.m_inputStream, minute, ':');
-	convert << minute;
-	convert >> e.timeDate.tm_min;
+    std::string minute;
+    getline(lr.m_inputStream, minute, ':');
+    convert << minute;
+    convert >> e.timeDate.tm_min;
 
-	std::string second;
-	getline(lr.m_inputStream, second, ' ');
-	convert << second;
-	convert >> e.timeDate.tm_sec;
+    std::string second;
+    getline(lr.m_inputStream, second, ' ');
+    convert << second;
+    convert >> e.timeDate.tm_sec;
 
-	std::string timezone;
-	getline(lr.m_inputStream, timezone, '}');
+    std::string timezone;
+    getline(lr.m_inputStream, timezone, '}');
 
-	lr.m_inputStream.ignore(2);
+    lr.m_inputStream.ignore(2);
 
-	getline(lr.m_inputStream, e.method, ' ');
+    getline(lr.m_inputStream, e.method, ' ');
 
-	getline(lr.m_inputStream, e.page, ' ');
+    getline(lr.m_inputStream, e.page, ' ');
 
-	getline(lr.m_inputStream, e.version, '"');
+    getline(lr.m_inputStream, e.version, '"');
 
-	lr.m_inputStream.ignore(1, ' ');
+    lr.m_inputStream.ignore(1, ' ');
 
-	std::string status;
-	getline(lr.m_inputStream, status, ' ');
-	convert << status;
-	convert >> e.status;
+    std::string status;
+    getline(lr.m_inputStream, status, ' ');
+    convert << status;
+    convert >> e.status;
 
-	std::string size;
-	getline(lr.m_inputStream, size, ' ');
-	convert << size;
-	convert >> e.size;
+    std::string size;
+    getline(lr.m_inputStream, size, ' ');
+    convert << size;
+    convert >> e.size;
 
-	lr.m_inputStream.ignore(1, '"');
+    lr.m_inputStream.ignore(1, '"');
 
-	getline(lr.m_inputStream, e.referrer, '"');
+    getline(lr.m_inputStream, e.referrer, '"');
 
-	lr.m_inputStream.ignore(2);
+    lr.m_inputStream.ignore(2);
 
-	getline(lr.m_inputStream, e.userAgent, '"');
+    getline(lr.m_inputStream, e.userAgent, '"');
 
-	lr.m_inputStream.ignore(2, '\n');
+    lr.m_inputStream.ignore(2, '\n');
 
-	return lr;
+    return lr;
 }

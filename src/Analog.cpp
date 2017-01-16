@@ -44,10 +44,10 @@ void Analog::generateGraph(std::ostream &output)
 
     for (int i = 0; iterator != pages.end(); iterator++, i++)
     {
-	    std::string num;
-	    std::stringstream convert;
-	    convert << i;
-	    convert >> num;
+        std::string num;
+        std::stringstream convert;
+        convert << i;
+        convert >> num;
 
         nodes[&(iterator->second)] = NODE_PREFIX + num;
         // Declare nodes
@@ -76,75 +76,18 @@ void Analog::generateGraph(std::ostream &output)
 
 void Analog::readFile(std::string fileName)
 {
-	std::ifstream ifs(fileName, std::ifstream::in);
+    std::ifstream ifs(fileName, std::ifstream::in);
 
-	LogReader lr(ifs);
+    LogReader lr(ifs);
 
-	LogEntry e;
+    LogEntry e;
 
-	while (lr >> e)
-	{
-		pages[e.page].AddHit(&pages[e.referrer]);
-	}
-}
-
-//------------------------------------------- METHODES PUBLIC
-
-
-//------------------------------------------- Redefinition d'operateurs
-
-//------------------------------------------- Constructeurs - destructeur
-
-
-
-void Analog::parse(std::istream &input)
-{
-    std::string pageName;
-    std::string referrer;
-
-    std::string hour;
-    std::string minute;
-    std::string second;
-    struct tm time;
-
-    while (true) {
-        input.ignore(std::numeric_limits<std::streamsize>::max(), ':');
-
-        if (input.eof()) break;
-
-        getline(input, hour, ':');
-        time.tm_hour = std::stoi(hour);
-
-        getline(input, minute, ':');
-        time.tm_min = std::stoi(minute);
-
-        getline(input, second, ' ');
-        time.tm_sec = std::stoi(second);
-
-        input.ignore(std::numeric_limits<std::streamsize>::max(), '"');
-        input.ignore(std::numeric_limits<std::streamsize>::max(), ' ');
-
-        getline(input, pageName, ' ');
-
-        input.ignore(std::numeric_limits<std::streamsize>::max(), '"');
-        input.ignore(std::numeric_limits<std::streamsize>::max(), '"');
-
-        getline(input, referrer, '"');
-
-        input.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    while (lr >> e)
+    {
+        pages[e.page].AddHit(&pages[e.referrer]);
     }
 }
 
-
-Analog::Analog()
-{
-
-}
-
-Analog::~Analog()
-{
-
-}
 
 void Analog::writeFile(std::string fileName, std::ostream &output)
 {
@@ -168,6 +111,9 @@ void Analog::displayTop()
     }
 }
 
+
+//------------------------------------------- METHODES PUBLIC
+
 int Analog::Run(AnalogOptions parameters)
 {
     this->parameters = parameters;
@@ -175,4 +121,19 @@ int Analog::Run(AnalogOptions parameters)
 
     displayTop();
     return 0;
+}
+
+//------------------------------------------- Redefinition d'operateurs
+
+//------------------------------------------- Constructeurs - destructeur
+
+
+Analog::Analog()
+{
+
+}
+
+Analog::~Analog()
+{
+
 }

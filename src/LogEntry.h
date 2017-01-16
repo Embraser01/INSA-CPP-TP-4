@@ -10,23 +10,23 @@
 
 struct LogEntry
 {
-	std::string ip;
-	std::string userLogname;
-	std::string authenticatedUser;
+    std::string ip;
+    std::string userLogname;
+    std::string authenticatedUser;
 
-	struct tm timeDate;
+    struct tm timeDate;
 
-	std::string method;
-	std::string page;
-	std::string version;
+    std::string method;
+    std::string page;
+    std::string version;
 
-	int status;
+    int status;
 
-	int size;
+    int size;
 
-	std::string referrer;
+    std::string referrer;
 
-	std::string userAgent;
+    std::string userAgent;
 };
 
 
