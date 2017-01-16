@@ -27,7 +27,6 @@ const uint MAX_DISPLAY_LINES = 10;
 //------------------------------------------- Méthodes protégées et privées
 
 
-
 void Analog::generateGraph(std::ostream &output)
 {
     typedef std::map<std::string, Page>::iterator it_map_type;
@@ -90,9 +89,15 @@ void Analog::readFile(std::string fileName)
 }
 
 
-void Analog::writeFile(std::string fileName, std::ostream &output)
+void Analog::writeGraph(std::string fileName)
 {
+    std::ofstream ofs(fileName);
 
+    // TODO Check if exists/etc…
+
+    generateGraph(ofs);
+
+    cout << "Dot-file " << fileName << " generated" << endl;
 }
 
 void Analog::displayTop()
@@ -123,6 +128,11 @@ int Analog::Run(AnalogOptions parameters)
 
     readFile(parameters.fileName);
 
+
+    if (parameters.graph.first)
+    {
+        writeGraph(parameters.graph.second);
+    }
     displayTop();
     return 0;
 }
