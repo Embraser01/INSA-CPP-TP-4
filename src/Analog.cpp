@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <sstream>
 #include <unordered_set>
+#include <vector>
 
 #include "Analog.h"
 #include "LogReader.h"
@@ -74,12 +75,15 @@ void Analog::generateGraph(std::ostream &output)
 
 }
 
-bool hasEnding (std::string const &fullString, std::string const &ending) {
-	if (fullString.length() >= ending.length()) {
-		return (0 == fullString.compare (fullString.length() - ending.length(), ending.length(), ending));
-	} else {
-		return false;
-	}
+bool hasEnding(std::string const &fullString, std::string const &ending)
+{
+    if (fullString.length() >= ending.length())
+    {
+        return (0 == fullString.compare(fullString.length() - ending.length(), ending.length(), ending));
+    } else
+    {
+        return false;
+    }
 }
 
 void Analog::readFile(std::string fileName)
@@ -92,43 +96,44 @@ void Analog::readFile(std::string fileName)
 
     while (lr >> e)
     {
-	    if (parameters.time.first)
-	    {
-		    if (!(parameters.time.second <= e.timeDate.tm_hour && e.timeDate.tm_hour < parameters.time.second + 1))
-		    {
-			    continue;
-		    }
-	    }
+        if (parameters.time.first)
+        {
+            if (!(parameters.time.second <= e.timeDate.tm_hour && e.timeDate.tm_hour < parameters.time.second + 1))
+            {
+                continue;
+            }
+        }
 
-	    if (parameters.exclude)
-	    {
-		    static const std::unordered_set<std::string> ext
-		    {
-			    ".png",
-		        ".jpeg",
-		        ".jpg",
-		        ".gif",
-		        ".bmp",
-		        ".tiff",
-		        ".js",
-		        ".css"
-		    };
+        if (parameters.exclude)
+        {
+            static const std::unordered_set<std::string> ext
+                    {
+                            ".png",
+                            ".jpeg",
+                            ".jpg",
+                            ".gif",
+                            ".bmp",
+                            ".tiff",
+                            ".ico",
+                            ".js",
+                            ".css"
+                    };
 
-		    bool end = false;
-		    for (std::string s : ext)
-		    {
-			    if (hasEnding(e.page, s))
-			    {
-				    end = true;
-				    break;
-			    }
-		    }
+            bool end = false;
+            for (std::string s : ext)
+            {
+                if (hasEnding(e.page, s))
+                {
+                    end = true;
+                    break;
+                }
+            }
 
-		    if (end)
-		    {
-			    break;
-		    }
-	    }
+            if (end)
+            {
+                continue;
+            }
+        }
 
         pages[e.page].AddHit(&pages[e.referrer]);
     }
