@@ -60,6 +60,9 @@ LogReader &operator>>(LogReader &lr, LogEntry &e)
     convert << day;
     convert >> e.timeDate.tm_mday;
 
+	convert.str("");
+convert.clear();;
+
     std::string month;
     getline(lr.m_inputStream, month, '/');
     e.timeDate.tm_mon = lr.GetMonthIndex(month);
@@ -69,20 +72,32 @@ LogReader &operator>>(LogReader &lr, LogEntry &e)
     convert << year;
     convert >> e.timeDate.tm_year;
 
+	convert.str("");
+convert.clear();
+
     std::string hour;
     getline(lr.m_inputStream, hour, ':');
     convert << hour;
     convert >> e.timeDate.tm_hour;
+
+	convert.str("");
+convert.clear();
 
     std::string minute;
     getline(lr.m_inputStream, minute, ':');
     convert << minute;
     convert >> e.timeDate.tm_min;
 
+	convert.str("");
+convert.clear();
+
     std::string second;
     getline(lr.m_inputStream, second, ' ');
     convert << second;
     convert >> e.timeDate.tm_sec;
+
+	convert.str("");
+convert.clear();
 
     std::string timezone;
     getline(lr.m_inputStream, timezone, ']');
@@ -101,6 +116,9 @@ LogReader &operator>>(LogReader &lr, LogEntry &e)
     getline(lr.m_inputStream, status, ' ');
     convert << status;
     convert >> e.status;
+
+	convert.str("");
+convert.clear();
 
     std::string size;
     getline(lr.m_inputStream, size, ' ');

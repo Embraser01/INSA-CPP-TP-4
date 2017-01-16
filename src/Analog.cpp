@@ -111,6 +111,7 @@ void Analog::readFile(std::string fileName)
 		        ".gif",
 		        ".bmp",
 		        ".tiff",
+		        ".ico",
 		        ".js",
 		        ".css"
 		    };
@@ -127,7 +128,7 @@ void Analog::readFile(std::string fileName)
 
 		    if (end)
 		    {
-			    break;
+			    continue;
 		    }
 	    }
 
