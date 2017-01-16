@@ -10,6 +10,7 @@
 #include <iostream>
 #include <algorithm>
 #include <sstream>
+#include <vector>
 
 #include "Analog.h"
 #include "LogReader.h"
@@ -96,16 +97,18 @@ void Analog::writeFile(std::string fileName, std::ostream &output)
 
 void Analog::displayTop()
 {
+    std::vector<std::pair<string, Page>> items(pages.begin(), pages.end());
+
     auto cmp = [](std::pair<string, Page> const &a, std::pair<string, Page> const &b) {
         return a.second.Hits() != b.second.Hits() ? a.second.Hits() < b.second.Hits() : a.first < b.first;
     };
 
-    std::sort(pages.begin(), pages.end(), cmp);
+    std::sort(items.begin(), items.end(), cmp);
 
-    std::map<std::string, Page>::iterator it;
+    std::vector<std::pair<string, Page>>::iterator it;
     uint count = 0;
 
-    for (it = pages.begin(); it != pages.end() && count < MAX_DISPLAY_LINES; it++, count++)
+    for (it = items.begin(); it != items.end() && count < MAX_DISPLAY_LINES; it++, count++)
     {
         cout << it->first << " (" << it->second.Hits() << " hits)" << endl;
     }
@@ -118,6 +121,7 @@ int Analog::Run(AnalogOptions parameters)
 {
     this->parameters = parameters;
 
+    readFile(parameters.fileName);
 
     displayTop();
     return 0;

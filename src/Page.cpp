@@ -9,7 +9,7 @@ using std::cout;
 
 //------------------------------------------- METHODES PUBLIC
 
-unsigned int Page::Hits()
+unsigned int Page::Hits() const
 {
     return hits;
 }

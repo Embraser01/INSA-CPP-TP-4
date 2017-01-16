@@ -16,7 +16,7 @@ class Page
 
 public:
 
-    unsigned int Hits();
+    unsigned int Hits() const;
     // TODO Documentation
 
 
