@@ -10,7 +10,7 @@
 #include <iostream>
 #include <algorithm>
 #include <sstream>
-#include <vector>
+#include <unordered_set>
 
 #include "Analog.h"
 #include "LogReader.h"
@@ -75,6 +75,14 @@ void Analog::generateGraph(std::ostream &output)
 
 }
 
+bool hasEnding (std::string const &fullString, std::string const &ending) {
+	if (fullString.length() >= ending.length()) {
+		return (0 == fullString.compare (fullString.length() - ending.length(), ending.length(), ending));
+	} else {
+		return false;
+	}
+}
+
 void Analog::readFile(std::string fileName)
 {
     std::ifstream ifs(fileName, std::ifstream::in);
@@ -85,6 +93,44 @@ void Analog::readFile(std::string fileName)
 
     while (lr >> e)
     {
+	    if (parameters.time.first)
+	    {
+		    if (!(parameters.time.second <= e.timeDate.tm_hour && e.timeDate.tm_hour < parameters.time.second + 1))
+		    {
+			    continue;
+		    }
+	    }
+
+	    if (parameters.exclude)
+	    {
+		    static const std::unordered_set<std::string> ext
+		    {
+			    ".png",
+		        ".jpeg",
+		        ".jpg",
+		        ".gif",
+		        ".bmp",
+		        ".tiff",
+		        ".js",
+		        ".css"
+		    };
+
+		    bool end = false;
+		    for (std::string s : ext)
+		    {
+			    if (hasEnding(e.page, s))
+			    {
+				    end = true;
+				    break;
+			    }
+		    }
+
+		    if (end)
+		    {
+			    break;
+		    }
+	    }
+
         pages[e.page].AddHit(&pages[e.referrer]);
     }
 }
