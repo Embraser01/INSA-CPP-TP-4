@@ -22,7 +22,7 @@ using std::cout;
 //------------------------------------------- Constantes, statiques et types privés
 
 const std::string NODE_PREFIX = "node";
-const uint MAX_DISPLAY_LINES = 10;
+const unsigned int MAX_DISPLAY_LINES = 10;
 
 //------------------------------------------- Méthodes protégées et privées
 
@@ -106,7 +106,7 @@ void Analog::displayTop()
     std::sort(items.begin(), items.end(), cmp);
 
     std::vector<std::pair<string, Page>>::iterator it;
-    uint count = 0;
+    unsigned int count = 0;
 
     for (it = items.begin(); it != items.end() && count < MAX_DISPLAY_LINES; it++, count++)
     {

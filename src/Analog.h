@@ -13,7 +13,7 @@ struct AnalogOptions
 {
     std::pair<bool, std::string> graph;
     bool exclude;
-    std::pair<bool, uint> time;
+    std::pair<bool, unsigned int> time;
     std::string fileName;
 };
 
