@@ -8,6 +8,7 @@
 #include <limits>
 #include <string>
 #include <iostream>
+#include <algorithm>
 
 #include "Analog.h"
 
@@ -18,6 +19,7 @@ using std::cout;
 //------------------------------------------- Constantes, statiques et types privés
 
 const std::string NODE_PREFIX = "node";
+const uint MAX_DISPLAY_LINES = 10;
 
 //------------------------------------------- Méthodes protégées et privées
 
@@ -84,7 +86,8 @@ void Analog::parse(std::istream &input)
     std::string second;
     struct tm time;
 
-    while (true) {
+    while (true)
+    {
         input.ignore(std::numeric_limits<std::streamsize>::max(), ':');
 
         if (input.eof()) break;
@@ -112,10 +115,6 @@ void Analog::parse(std::istream &input)
     }
 }
 
-int Analog::Run(std::pair<bool, std::string> graph, bool exclude, std::pair<bool, uint> time, std::string fileName)
-{
-    return 0;
-}
 
 Analog::Analog()
 {
@@ -139,5 +138,26 @@ void Analog::writeFile(std::string fileName, std::ostream &output)
 
 void Analog::displayTop()
 {
+    auto cmp = [](std::pair<string, Page> const &a, std::pair<string, Page> const &b) {
+        return a.second.Hits() != b.second.Hits() ? a.second.Hits() < b.second.Hits() : a.first < b.first;
+    };
 
+    std::sort(pages.begin(), pages.end(), cmp);
+
+    std::map<std::string, Page>::iterator it;
+    uint count = 0;
+
+    for (it = pages.begin(); it != pages.end() && count < MAX_DISPLAY_LINES; it++, count++)
+    {
+        cout << it->first << " (" << it->second.Hits() << " hits)" << endl;
+    }
+}
+
+int Analog::Run(AnalogOptions parameters)
+{
+    this->parameters = parameters;
+
+
+    displayTop();
+    return 0;
 }

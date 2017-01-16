@@ -8,6 +8,15 @@
 #include <map>
 #include "Page.h"
 
+
+struct AnalogOptions
+{
+    std::pair<bool, std::string> graph;
+    bool exclude;
+    std::pair<bool, uint> time;
+    std::string fileName;
+};
+
 //------------------------------------------- Rôle de la classe
 // Rôle : TODO Documentation
 //-------------------------------------------
@@ -19,7 +28,7 @@ class Analog
 
 public:
 
-    int Run(std::pair<bool, std::string> graph, bool exclude, std::pair<bool, uint> time, std::string fileName);
+    int Run(AnalogOptions parameters);
     // TODO Documentation
 
     //--------------------------------------- Redéfinition d'opérateurs
@@ -56,15 +65,9 @@ private:
 
 protected:
 private:
-    std::map <std::string, Page> pages;
+    std::map<std::string, Page> pages;
 
-    std::pair<bool, std::string> graph;
-
-    bool exclude;
-
-    std::pair<bool, uint> time;
-
-    std::string fileName;
+    AnalogOptions parameters;
 
 };
 
