@@ -1,5 +1,7 @@
 #include <iostream>
 #include <unistd.h>
+#include <sstream>
+#include <cstdlib>
 
 #include "Analog.h"
 
@@ -41,13 +43,16 @@ int main(int argc, char *argv[])
                 parameters.time.first = true;
                 try
                 {
-                    int time = std::stoi(optarg);
+                    int time;
+	                std::stringstream convert;
+	                convert << optarg;
+	                convert >> time;
                     if (time < 0)
                     {
                         throw std::invalid_argument("received negative value");
                     } else
                     {
-                        parameters.time.second = (uint) time;
+                        parameters.time.second = (unsigned int) time;
                     }
 
                 } catch (std::exception &e)
