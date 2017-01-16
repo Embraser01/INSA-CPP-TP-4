@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Page.h"
 
 using std::cout;
@@ -37,7 +38,7 @@ Page::Page()
 #endif
 }
 
-void Page::~Page()
+Page::~Page()
 {
 
 #ifdef MAP
