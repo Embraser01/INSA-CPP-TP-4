@@ -17,7 +17,7 @@ const std::string NODE_PREFIX = "node";
 
 
 
-void &Analog::generateGraph(std::ostream &output)
+void Analog::generateGraph(std::ostream &output)
 {
     typedef std::map<std::string, Page>::iterator it_map_type;
     typedef std::unordered_map<Page *, uint>::iterator it_umap_type;
