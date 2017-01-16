@@ -49,7 +49,7 @@ private:
     void readFile(std::string fileName);
     // TODO Documentation
 
-    void writeFile(std::string fileName, std::ostream &output);
+    void writeGraph(std::string fileName);
     // TODO Documentation
 
     void generateGraph(std::ostream &output);

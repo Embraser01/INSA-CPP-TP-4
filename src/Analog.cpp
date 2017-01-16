@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <sstream>
 #include <unordered_set>
+#include <vector>
 
 #include "Analog.h"
 #include "LogReader.h"
@@ -21,11 +22,11 @@ using std::cout;
 
 //------------------------------------------- Constantes, statiques et types privés
 
-const std::string NODE_PREFIX = "node";
-const unsigned int MAX_DISPLAY_LINES = 10;
+static const std::string NODE_PREFIX = "node";
+static const std::string LOCAL_PREFIX = "http://intranet-if.insa-lyon.fr";
+static const unsigned int MAX_DISPLAY_LINES = 10;
 
 //------------------------------------------- Méthodes protégées et privées
-
 
 
 void Analog::generateGraph(std::ostream &output)
@@ -75,12 +76,15 @@ void Analog::generateGraph(std::ostream &output)
 
 }
 
-bool hasEnding (std::string const &fullString, std::string const &ending) {
-	if (fullString.length() >= ending.length()) {
-		return (0 == fullString.compare (fullString.length() - ending.length(), ending.length(), ending));
-	} else {
-		return false;
-	}
+bool hasEnding(std::string const &fullString, std::string const &ending)
+{
+    if (fullString.length() >= ending.length())
+    {
+        return (0 == fullString.compare(fullString.length() - ending.length(), ending.length(), ending));
+    } else
+    {
+        return false;
+    }
 }
 
 void Analog::readFile(std::string fileName)
@@ -93,53 +97,102 @@ void Analog::readFile(std::string fileName)
 
     while (lr >> e)
     {
-	    if (parameters.time.first)
-	    {
-		    if (!(parameters.time.second <= e.timeDate.tm_hour && e.timeDate.tm_hour < parameters.time.second + 1))
-		    {
-			    continue;
-		    }
-	    }
+        if (parameters.time.first)
+        {
+            if (!(parameters.time.second <= e.timeDate.tm_hour && e.timeDate.tm_hour < parameters.time.second + 1))
+            {
+                continue;
+            }
+        }
 
-	    if (parameters.exclude)
-	    {
-		    static const std::unordered_set<std::string> ext
-		    {
-			    ".png",
-		        ".jpeg",
-		        ".jpg",
-		        ".gif",
-		        ".bmp",
-		        ".tiff",
-		        ".ico",
-		        ".js",
-		        ".css"
-		    };
+        if (parameters.exclude)
+        {
+            static const std::unordered_set<std::string> ext
+                    {
+                            ".png",
+                            ".jpeg",
+                            ".jpg",
+                            ".gif",
+                            ".bmp",
+                            ".tiff",
+                            ".ico",
+                            ".js",
+                            ".css"
+                    };
 
-		    bool end = false;
-		    for (std::string s : ext)
-		    {
-			    if (hasEnding(e.page, s))
-			    {
-				    end = true;
-				    break;
-			    }
-		    }
+            bool end = false;
+            for (std::string s : ext)
+            {
+                if (hasEnding(e.page, s))
+                {
+                    end = true;
+                    break;
+                }
+            }
 
-		    if (end)
-		    {
-			    continue;
-		    }
-	    }
+            if (end)
+            {
+                continue;
+            }
+        }
+        size_t foundPage = e.page.find_first_of("?#;");
+        size_t foundRef = e.referrer.find_first_of("?#;");
+        size_t foundLocalPrefixPage = e.page.find(LOCAL_PREFIX);
+        size_t foundLocalPrefixRef = e.referrer.find(LOCAL_PREFIX);
 
-        pages[e.page].AddHit(&pages[e.referrer]);
+        string page = e.page;
+        string referrer = e.referrer;
+
+        if (foundPage != string::npos)
+        {
+            page = page.substr(0, foundPage);
+        }
+        if (foundRef  != string::npos)
+        {
+            referrer = referrer.substr(0, foundRef);
+        }
+        if (foundLocalPrefixPage == 0)
+        {
+            page = page.erase(foundLocalPrefixPage, LOCAL_PREFIX.size());
+        }
+        if (foundLocalPrefixRef == 0)
+        {
+            referrer = referrer.erase(foundLocalPrefixRef, LOCAL_PREFIX.size());
+        }
+
+        pages[page].AddHit(&pages[referrer]);
     }
 }
 
 
-void Analog::writeFile(std::string fileName, std::ostream &output)
+void Analog::writeGraph(std::string fileName)
 {
+    if (std::ifstream(fileName))
+    {
+        cout << "File already exists, do you want to continue ? (y/N): ";
+        string entry;
+        getline(std::cin, entry);
 
+        if (tolower(entry[0]) != 'y')
+        {
+            return;
+        }
+    }
+
+    std::ofstream ofs(fileName);
+
+    // On vérifie que le fichier existe et est lisible & inscriptible
+
+    if (!ofs.is_open())
+    {
+        cout << "Erreur, impossible d'obtenir un flux d'écriture" << endl;
+        return;
+    }
+    // TODO Check if exists/etc…
+
+    generateGraph(ofs);
+
+    cout << "Dot-file " << fileName << " generated" << endl;
 }
 
 void Analog::displayTop()
@@ -170,6 +223,11 @@ int Analog::Run(AnalogOptions parameters)
 
     readFile(parameters.fileName);
 
+
+    if (parameters.graph.first)
+    {
+        writeGraph(parameters.graph.second);
+    }
     displayTop();
     return 0;
 }
