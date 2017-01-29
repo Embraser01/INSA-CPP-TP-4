@@ -18,36 +18,36 @@ class Page
 public:
 
     unsigned int Hits() const;
-	// Mode d'emploi :
-	//     Retourne le nombre total de hits de cette page.
+    // Mode d'emploi :
+    //     Retourne le nombre total de hits de cette page.
 
 
     const std::unordered_map<Page *, unsigned int> &Referrers();
-	// Mode d'emploi :
-	//     Retourne la map contenant tous les referrers de cette page ainsi que
-	//     leur nombre de hits associé.
+    // Mode d'emploi :
+    //     Retourne la map contenant tous les referrers de cette page ainsi que
+    //     leur nombre de hits associé.
 
 
     void AddHit(Page *referrer);
-	// Mode d'emploi :
-	//     Ajoute un hit provenant d'un referrer.
-	//     * referrer : la page d'où provient le hit
-	//
-	// Contrat :
-	//     referrer pointeur valide sur Page
+    // Mode d'emploi :
+    //     Ajoute un hit provenant d'un referrer.
+    //     * referrer : la page d'où provient le hit
+    //
+    // Contrat :
+    //     referrer pointeur valide sur Page
 
     //--------------------------------------- Redéfinition d'opérateurs
 
     //--------------------------------------- Constructeurs - destructeur
 
     Page();
-	// Mode d'emploi :
-	//     Construit une nouvelle page sans hits
+    // Mode d'emploi :
+    //     Construit une nouvelle page sans hits
 
 
     virtual ~Page();
-	// Mode d'emploi :
-	//     Détruit l'objet Page
+    // Mode d'emploi :
+    //     Détruit l'objet Page
 
 
 //--------------------------------------- Méthodes protégées ou privées

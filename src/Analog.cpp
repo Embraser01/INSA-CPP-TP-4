@@ -147,7 +147,7 @@ void Analog::readFile(std::string fileName)
         {
             page = page.substr(0, foundPage);
         }
-        if (foundRef  != string::npos)
+        if (foundRef != string::npos)
         {
             referrer = referrer.substr(0, foundRef);
         }

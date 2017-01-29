@@ -1,2 +1,5 @@
-obj/Analog.o: src/Analog.cpp src/Analog.h src/Page.h
+obj/Analog.o: src/Analog.cpp src/Analog.h src/Page.h src/LogReader.h \
+ src/LogEntry.h
+obj/LogReader.o: src/LogReader.cpp src/LogReader.h src/LogEntry.h
+obj/main.o: src/main.cpp src/Analog.h src/Page.h
 obj/Page.o: src/Page.cpp src/Page.h

@@ -44,9 +44,9 @@ int main(int argc, char *argv[])
                 try
                 {
                     int time;
-	                std::stringstream convert;
-	                convert << optarg;
-	                convert >> time;
+                    std::stringstream convert;
+                    convert << optarg;
+                    convert >> time;
                     if (time < 0)
                     {
                         throw std::invalid_argument("received negative value");
@@ -65,13 +65,17 @@ int main(int argc, char *argv[])
             case ':':
             case '?':
                 if (optopt == 'g' || optopt == 't')
+                {
                     fprintf(stderr, "Option -%c requires an argument.\n", optopt);
-                else if (isprint(optopt))
+                } else if (isprint(optopt))
+                {
                     fprintf(stderr, "Unknown option `-%c'.\n", optopt);
-                else
+                } else
+                {
                     fprintf(stderr,
                             "Unknown option character `\\x%x'.\n",
                             optopt);
+                }
                 return 1;
             default:
                 abort();
@@ -93,6 +97,12 @@ int main(int argc, char *argv[])
     } else
     {
         parameters.fileName = argv[index];
+    }
+
+    if (!std::ifstream(parameters.fileName))
+    {
+        std::cout << "Log file does not exist !" << std::endl;
+        return 1;
     }
 
     return application.Run(parameters);

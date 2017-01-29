@@ -1,0 +1,1 @@
+../../app.out -e -g court.dot  ../res/court.log
