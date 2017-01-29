@@ -91,6 +91,12 @@ void Analog::readFile(std::string fileName)
 {
     std::ifstream ifs(fileName, std::ifstream::in);
 
+	if (!ifs.is_open())
+	{
+		cout << "Erreur, impossible d'obtenir un flux de lecture." << endl;
+		return;
+	}
+
     LogReader lr(ifs);
 
     LogEntry e;
