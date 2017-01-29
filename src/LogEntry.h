@@ -1,12 +1,14 @@
-//
-// Created by Tristan on 16/01/2017.
-//
-
 #ifndef TP4_LOGENTRY_H
 #define TP4_LOGENTRY_H
 
+//------------------------------------------- Interfaces utilisées, Types, Constantes
+
 #include <ctime>
 #include <string>
+
+//------------------------------------------- Rôle de la structure
+// Rôle : Représente une entrée de log de façon structurée et typée.
+//-------------------------------------------
 
 struct LogEntry
 {

@@ -30,9 +30,8 @@ void Page::AddHit(Page *referrer)
 
 //------------------------------------------- Constructeurs - destructeur
 
-Page::Page()
+Page::Page() : hits(0)
 {
-    hits = 0;
 
 #ifdef MAP
     cout << "Constructeur de <Page>" << endl;
