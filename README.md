@@ -42,3 +42,29 @@ make
 ```bash
 dot -Tpng -o graph.png graph.dot
 ```
+
+### Tests fonctionnels
+
+Avant tout :
+```bash
+make all
+cd tests/
+```
+
+Pour lancer les tests :
+```bash
+./mktest.sh
+```
+
+Pour lancer un seul test :
+```bash
+./test [test_id]
+```
+
+Liste des tests :
+- TestBadArguments
+- TestHits
+- TestOptionGraph
+- TestOptionHours
+- TestOptionLess
+- TestParsing
