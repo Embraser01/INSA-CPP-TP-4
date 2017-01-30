@@ -1,7 +1,0 @@
-Test ID;Return code validation;Out result;StdErr result;File creation result;Global result
-TestBadArguments;1;2;2;2;1
-TestHits;2;1;2;2;1
-TestOptionGraph;2;2;2;1;1
-TestOptionHours;2;1;2;2;1
-TestOptionLess;2;1;2;2;1
-TestParsing;2;1;2;2;1
